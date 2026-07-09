@@ -4,6 +4,8 @@ A browser extension that lets you pick any element on a page and copy it as Mark
 
 Useful when you need to copy part of a web page — a list, a table, an article snippet — and paste it somewhere as clean Markdown instead of raw HTML formatting.
 
+![Picking the intro paragraph of Wikipedia's Pizza Cat article](./screenshots/usage.png)
+
 ## How it works
 
 1. Click the extension icon to toggle inspect mode.
