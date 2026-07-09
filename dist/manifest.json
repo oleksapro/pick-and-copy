@@ -1,0 +1,56 @@
+{
+  "manifest_version": 3,
+  "name": "Pick & Copy as Markdown",
+  "version": "1.0.0",
+  "description": "Pick any element on a page and copy it as Markdown.",
+  "icons": {
+    "16": "public/icons/icon16.png",
+    "48": "public/icons/icon48.png",
+    "128": "public/icons/icon128.png"
+  },
+  "action": {
+    "default_icon": {
+      "16": "public/icons/icon16.png",
+      "48": "public/icons/icon48.png",
+      "128": "public/icons/icon128.png"
+    },
+    "default_title": "Pick & Copy as Markdown"
+  },
+  "background": {
+    "service_worker": "service-worker-loader.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "js": [
+        "assets/content.js-loader-Bf21ImJ6.js"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ],
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "clipboardWrite"
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "pick-and-copy@local.extension",
+      "strict_min_version": "121.0"
+    }
+  },
+  "web_accessible_resources": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "resources": [
+        "assets/browser-polyfill-COJV982g.js",
+        "assets/content.js-jJTENYXs.js"
+      ],
+      "use_dynamic_url": false
+    }
+  ]
+}
