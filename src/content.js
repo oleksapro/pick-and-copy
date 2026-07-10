@@ -4,6 +4,23 @@ import { gfm } from 'turndown-plugin-gfm'
 
 const turndownService = new TurndownService({ headingStyle: 'atx', codeBlockStyle: 'fenced' })
 turndownService.use(gfm)
+turndownService.addRule('absoluteImages', {
+  filter: 'img',
+  replacement: (content, node) => {
+    const alt = node.alt || ''
+    const src = node.getAttribute('src') || ''
+    const title = node.title || ''
+    const titlePart = title ? ` "${title}"` : ''
+    if (!src) return ''
+    let absoluteSrc
+    try {
+      absoluteSrc = new URL(src, document.baseURI).href
+    } catch {
+      absoluteSrc = src
+    }
+    return `![${alt}](${absoluteSrc}${titlePart})`
+  },
+})
 
 let inspecting = false
 let currentTarget = null
@@ -116,6 +133,7 @@ function stopInspecting() {
   document.removeEventListener('click', onClick, true)
   document.removeEventListener('keydown', onKeyDown, true)
   removeOverlay()
+  browser.runtime.sendMessage({ type: 'inspecting-stopped' }).catch(() => {})
 }
 
 async function copyElementAsMarkdown(el) {
@@ -178,9 +196,8 @@ function showToast(message, isError = false) {
 }
 
 browser.runtime.onMessage.addListener((message) => {
-  if (message?.type === 'toggle-inspect') {
-    if (inspecting) stopInspecting()
-    else startInspecting()
+  if (message?.type === 'start-inspect') {
+    startInspecting()
     return Promise.resolve({ inspecting })
   }
   if (message?.type === 'write-clipboard') {

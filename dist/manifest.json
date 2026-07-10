@@ -23,7 +23,7 @@
   "content_scripts": [
     {
       "js": [
-        "assets/content.js-loader-D13Z2bRR.js"
+        "assets/content.js-loader-CokmkGJD.js"
       ],
       "matches": [
         "<all_urls>"
@@ -50,7 +50,7 @@
       ],
       "resources": [
         "assets/browser-polyfill-COJV982g.js",
-        "assets/content.js-Blny5Gx9.js"
+        "assets/content.js-a9IJa9Bt.js"
       ],
       "use_dynamic_url": false
     }

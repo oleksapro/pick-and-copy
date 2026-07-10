@@ -8,8 +8,8 @@ function updateBadge(tabId, inspecting) {
 browser.action.onClicked.addListener(async (tab) => {
   if (!tab.id) return
   try {
-    const response = await browser.tabs.sendMessage(tab.id, { type: 'toggle-inspect' })
-    updateBadge(tab.id, Boolean(response?.inspecting))
+    await browser.tabs.sendMessage(tab.id, { type: 'start-inspect' })
+    updateBadge(tab.id, true)
   } catch {
     console.warn('Pick & Copy: no content script on this page (e.g. a browser internal page).')
   }
@@ -28,5 +28,8 @@ browser.runtime.onMessage.addListener((message, sender) => {
       { type: 'write-clipboard', text: message.text },
       { frameId: 0 },
     )
+  }
+  if (message?.type === 'inspecting-stopped' && sender.tab?.id != null) {
+    updateBadge(sender.tab.id, false)
   }
 })
