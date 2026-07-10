@@ -119,13 +119,29 @@ function stopInspecting() {
 }
 
 async function copyElementAsMarkdown(el) {
+  const markdown = turndownService.turndown(el.outerHTML).trim()
   try {
-    const markdown = turndownService.turndown(el.outerHTML).trim()
     await navigator.clipboard.writeText(markdown)
     showToast('Copied as Markdown')
   } catch (err) {
-    console.error('Pick & Copy: failed to copy markdown', err)
-    showToast('Copy failed — see console', true)
+    if (window.top === window) {
+      console.error('Pick & Copy: failed to copy markdown', err)
+      showToast('Copy failed — see console', true)
+      return
+    }
+    // Cross-origin iframes often don't have clipboard-write delegated via
+    // Permissions Policy. Ask the top frame (which usually does) to write instead.
+    try {
+      const response = await browser.runtime.sendMessage({
+        type: 'relay-clipboard-write',
+        text: markdown,
+      })
+      if (!response?.success) throw new Error(response?.error || 'unknown error')
+      showToast('Copied as Markdown')
+    } catch (relayErr) {
+      console.error('Pick & Copy: failed to copy markdown', relayErr)
+      showToast('Copy failed — see console', true)
+    }
   }
 }
 
@@ -166,5 +182,11 @@ browser.runtime.onMessage.addListener((message) => {
     if (inspecting) stopInspecting()
     else startInspecting()
     return Promise.resolve({ inspecting })
+  }
+  if (message?.type === 'write-clipboard') {
+    return navigator.clipboard.writeText(message.text).then(
+      () => ({ success: true }),
+      (err) => ({ success: false, error: String(err) }),
+    )
   }
 })

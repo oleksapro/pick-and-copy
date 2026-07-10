@@ -20,3 +20,13 @@ browser.tabs.onUpdated.addListener((tabId, changeInfo) => {
     browser.action.setBadgeText({ tabId, text: '' })
   }
 })
+
+browser.runtime.onMessage.addListener((message, sender) => {
+  if (message?.type === 'relay-clipboard-write' && sender.tab?.id != null) {
+    return browser.tabs.sendMessage(
+      sender.tab.id,
+      { type: 'write-clipboard', text: message.text },
+      { frameId: 0 },
+    )
+  }
+})

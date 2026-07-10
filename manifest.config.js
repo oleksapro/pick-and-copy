@@ -27,6 +27,8 @@ export default defineManifest({
     {
       matches: ['<all_urls>'],
       js: ['src/content.js'],
+      all_frames: true,
+      match_origin_as_fallback: true,
     },
   ],
   permissions: ['activeTab', 'scripting', 'clipboardWrite'],

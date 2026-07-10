@@ -23,11 +23,13 @@
   "content_scripts": [
     {
       "js": [
-        "assets/content.js-loader-Bf21ImJ6.js"
+        "assets/content.js-loader-D13Z2bRR.js"
       ],
       "matches": [
         "<all_urls>"
-      ]
+      ],
+      "all_frames": true,
+      "match_origin_as_fallback": true
     }
   ],
   "permissions": [
@@ -48,7 +50,7 @@
       ],
       "resources": [
         "assets/browser-polyfill-COJV982g.js",
-        "assets/content.js-jJTENYXs.js"
+        "assets/content.js-Blny5Gx9.js"
       ],
       "use_dynamic_url": false
     }
